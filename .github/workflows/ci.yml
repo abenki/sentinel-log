@@ -13,9 +13,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-            cd services/ingestion && uv sync --dev
-            cd services/ml && uv sync --dev
-            cd services/api && uv sync --dev
+            (cd services/ingestion && uv sync --dev)
+            (cd services/ml && uv sync --dev)
+            (cd services/api && uv sync --dev)
 
       - name: Lint
         run: make lint
