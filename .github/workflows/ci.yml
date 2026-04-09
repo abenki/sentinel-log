@@ -1,0 +1,24 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: |
+            cd services/ingestion && uv sync --dev
+            cd services/ml && uv sync --dev
+            cd services/api && uv sync --dev
+
+      - name: Lint
+        run: make lint
+
+      - name: Test
+        run: make test
