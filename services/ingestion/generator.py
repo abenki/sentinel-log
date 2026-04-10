@@ -129,32 +129,41 @@ class LogGenerator:
     Anomaly injection is delegated to an AnomalyInjector instance.
     """
 
-    def __init__(self, injector: AnomalyInjector, producer: KafkaProducer):
+    def __init__(self, injector: AnomalyInjector, producer: KafkaProducer | None):
         """Initializes the generator with an injector and a Kafka producer.
 
         Args:
             injector: AnomalyInjector instance controlling anomaly rate and logic.
             producer: Kafka producer used to publish log entries to raw-logs.
+                Pass None when using the generator without Kafka (e.g. dataset generation).
         """
         self.injector = injector
         self.producer = producer
 
+    def generate_one_log(self) -> LogEntry:
+        """Generates a single random log entry and passes it through the anomaly injector.
+
+        Returns:
+            A LogEntry, potentially modified with an injected anomaly.
+        """
+        log_type = random.choice([LogType.HTTP, LogType.SYSTEM, LogType.DB])
+        if log_type == LogType.HTTP:
+            log = self._generate_http()
+        elif log_type == LogType.SYSTEM:
+            log = self._generate_system()
+        else:
+            log = self._generate_db()
+        return self.injector.inject(log)
+
     def run(self) -> None:
         """Runs the generation loop indefinitely.
 
-        On each iteration, generates a random log entry, passes it through
-        the anomaly injector, and publishes it to the raw-logs Kafka topic.
+        On each iteration, calls `generate_one_log` and publishes the generated log to the raw-logs Kafka topic.
         Sleeps for GENERATION_INTERVAL_MS milliseconds between iterations.
         """
+        assert self.producer is not None
         while True:
-            log_type = random.choice([LogType.HTTP, LogType.SYSTEM, LogType.DB])
-            if log_type == LogType.HTTP:
-                log = self._generate_http()
-            elif log_type == LogType.SYSTEM:
-                log = self._generate_system()
-            else:
-                log = self._generate_db()
-            log = self.injector.inject(log)
+            log = self.generate_one_log()
             self.producer.send("raw-logs", value=log.model_dump_json().encode("utf-8"))
             time.sleep(int(os.getenv("GENERATION_INTERVAL_MS", "500")) / 1000)
 

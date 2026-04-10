@@ -1,4 +1,9 @@
-.PHONY: up down lint test train
+.PHONY: up down lint test train generate-dataset
+
+N_LOGS ?= 60000
+ANOMALY_RATE ?= 0.05
+OUTPUT ?= ../../data/logs.jsonl
+SEED ?= 42
 
 up:
 	docker compose up --build -d
@@ -18,3 +23,10 @@ test:
 
 train:
 	cd services/ml && uv run python train.py
+
+generate-dataset:
+	cd services/ingestion && uv run python generate_dataset.py \
+		--n-logs $(N_LOGS) \
+		--anomaly-rate $(ANOMALY_RATE) \
+		--output $(OUTPUT) \
+		--seed $(SEED)
