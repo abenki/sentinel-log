@@ -4,11 +4,16 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "httpx>=0.28.1",
+    "kafka-python-ng>=2.2.3",
+    "pydantic>=2.12.5",
+]
 
 [dependency-groups]
 dev = [
     "mypy>=1.20.0",
     "pytest>=9.0.3",
+    "respx>=0.23.1",
     "ruff>=0.15.10",
 ]
