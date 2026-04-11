@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from generate_dataset import main
-from schemas import LogEntry
+from shared.schemas import LogEntry
 
 
 # ---------------------------------------------------------------------------

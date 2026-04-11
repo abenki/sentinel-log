@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 from consumer import LogConsumer
-from schemas import LogEntry, LogType, HttpLog, SystemLog, DbLog
+from shared.schemas import LogEntry, LogType, HttpLog, SystemLog, DbLog
 
 
 ML_SERVICE_URL = "http://localhost:8000"

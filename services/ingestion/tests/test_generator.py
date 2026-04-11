@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 from generator import AnomalyInjector, LogGenerator
-from schemas import LogEntry, LogType, HttpLog, SystemLog, DbLog
+from shared.schemas import LogEntry, LogType, HttpLog, SystemLog, DbLog
 
 
 # ---------------------------------------------------------------------------

@@ -6,7 +6,7 @@ import os
 from datetime import datetime, timezone
 from kafka import KafkaProducer
 from typing import Literal, cast
-from schemas import LogEntry, LogType, HttpLog, SystemLog, DbLog
+from shared.schemas import LogEntry, LogType, HttpLog, SystemLog, DbLog
 
 
 HTTP_SOURCES = ["web-01", "web-02", "api-gateway"]

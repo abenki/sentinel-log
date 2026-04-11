@@ -12,7 +12,7 @@ import httpx
 from kafka import KafkaConsumer
 from pydantic import ValidationError
 
-from schemas import DbLog, HttpLog, LogEntry, LogType, SystemLog
+from shared.schemas import DbLog, HttpLog, LogEntry, LogType, SystemLog
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
